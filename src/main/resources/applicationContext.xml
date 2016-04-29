@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+	<context:component-scan base-package="cn.rest"></context:component-scan>
+	<mvc:annotation-driven></mvc:annotation-driven>
+	<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
+	<!-- 加载配置文件 -->
+	<!-- util:properties方式,类中@Value("#{jdbc[driver]}") -->
+	<!-- <util:properties id="jdbc" location="classpath:db.properties"></util:properties> -->
+	<!-- PropertyPlaceholderConfigurer方式,这里使用其扩展,以便其在源代码中使用,类中ConfigUtils.getString("db.driver") -->
+	<bean class="cn.rest.util.ConfigUtils">
+		<property name="locations">
+			<list>
+				<value>classpath:db.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+		<property name="ignoreResourceNotFound" value="false" />
+	</bean>
+	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${db.driver}"></property>
+        <property name="url" value="${db.url}"></property>
+        <property name="username" value="${db.user}"></property>
+        <property name="password" value="${db.password}"></property>
+    </bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="ds"></property>
+        <property name="mapperLocations" value="classpath:cn/rest/dao/*.xml"></property>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.rest.dao"></property>
+        <!-- 可以用注解的方式查找dao -->
+        <!-- <property name="annotationClass" value="cn.springmvc.annotation.MyBatisRepository"></property> -->
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds"></property>
+    </bean>
+    <!-- 注解声明事务 -->
+    <!-- <tx:annotation-driven proxy-target-class="true" -->
+    <!-- transaction-manager="transactionManager" /> -->
+    <!-- 配置事务 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="get*" propagation="NOT_SUPPORTED" />
+            <tx:method name="find*" propagation="NOT_SUPPORTED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    <aop:config expose-proxy="true">
+        <aop:pointcut expression="within(cn.rest.service..*)"
+            id="txPointcut" />
+        <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" />
+    </aop:config>
+</beans>

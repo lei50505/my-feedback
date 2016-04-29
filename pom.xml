@@ -34,6 +34,8 @@
         <mybatis-spring.version>1.2.3</mybatis-spring.version>
         <!-- mybatis版本 -->
         <mybatis.version>3.3.0</mybatis.version>
+        <!-- commons-lang3版本 -->
+        <commons-lang3.version>3.3.2</commons-lang3.version>
 	</properties>
 	<dependencies>
 		<!-- junit单元测试 -->
@@ -126,6 +128,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <!-- commons-lang3 -->
+        <!-- commons-lang3-3.3.2.jar -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
 	</dependencies>
 	<build>

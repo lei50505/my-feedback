@@ -31,4 +31,7 @@
 		#{userPassword,jdbcType=VARCHAR}
 		)
 	</insert>
+	<select id="getByPhone" resultMap="userResult" >
+	   select * from fb_user where fb_user_phone = #{phone}
+	</select>
 </mapper>

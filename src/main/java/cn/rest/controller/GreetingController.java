@@ -27,4 +27,11 @@ public class GreetingController {
         map.put("message",user);
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }
+    @RequestMapping(value = "/isExistPhone.do", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> isExistPhone(String phone) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        boolean flag = userService.isExistPhone(phone);
+        map.put("message",flag);
+        return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
+    }
 }

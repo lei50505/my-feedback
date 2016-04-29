@@ -9,12 +9,12 @@ import cn.rest.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
-    
+
     @Autowired
     private UserDao userDao;
-
     @Override
     public void add(User user) {
         userDao.insert(user);
     }
+    
 }

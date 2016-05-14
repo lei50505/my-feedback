@@ -5,129 +5,45 @@ import java.sql.Timestamp;
 
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
-    private int userId;
-    private String userCardId;
-    private String userName;
-    private String userCardPhoto;
-    private String userPhone;
-    private Integer userStatus;
-    private String userPassword;
-    private Timestamp createAt;
-    private Timestamp updateAt;
-
+    private Integer fb_user_id;
+    private String fb_user_name;
+    private String fb_user_phone;
+    private String fb_user_password;
+    private Timestamp fb_created_at;
+    private Timestamp fb_updated_at;
     public User() {
+        super();
     }
-
-    public User(int userId, String userCardId, String userName,
-            String userCardPhoto, String userPhone, Integer userStatus,
-            String userPassword, Timestamp createAt, Timestamp updateAt) {
-        this.userId = userId;
-        this.userCardId = userCardId;
-        this.userName = userName;
-        this.userCardPhoto = userCardPhoto;
-        this.userPhone = userPhone;
-        this.userStatus = userStatus;
-        this.userPassword = userPassword;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+    public User(Integer fb_user_id, String fb_user_name, String fb_user_phone,
+            String fb_user_password, Timestamp fb_created_at,
+            Timestamp fb_updated_at) {
+        super();
+        this.fb_user_id = fb_user_id;
+        this.fb_user_name = fb_user_name;
+        this.fb_user_phone = fb_user_phone;
+        this.fb_user_password = fb_user_password;
+        this.fb_created_at = fb_created_at;
+        this.fb_updated_at = fb_updated_at;
     }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public String getUserCardId() {
-        return userCardId;
-    }
-
-    public void setUserCardId(String userCardId) {
-        this.userCardId = userCardId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserCardPhoto() {
-        return userCardPhoto;
-    }
-
-    public void setUserCardPhoto(String userCardPhoto) {
-        this.userCardPhoto = userCardPhoto;
-    }
-
-    public String getUserPhone() {
-        return userPhone;
-    }
-
-    public void setUserPhone(String userPhone) {
-        this.userPhone = userPhone;
-    }
-
-    public Integer getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(Integer userStatus) {
-        this.userStatus = userStatus;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public Timestamp getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Timestamp createAt) {
-        this.createAt = createAt;
-    }
-
-    public Timestamp getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Timestamp updateAt) {
-        this.updateAt = updateAt;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result
-                + ((createAt == null) ? 0 : createAt.hashCode());
+                + ((fb_created_at == null) ? 0 : fb_created_at.hashCode());
         result = prime * result
-                + ((updateAt == null) ? 0 : updateAt.hashCode());
+                + ((fb_updated_at == null) ? 0 : fb_updated_at.hashCode());
         result = prime * result
-                + ((userCardId == null) ? 0 : userCardId.hashCode());
+                + ((fb_user_id == null) ? 0 : fb_user_id.hashCode());
         result = prime * result
-                + ((userCardPhoto == null) ? 0 : userCardPhoto.hashCode());
-        result = prime * result + userId;
+                + ((fb_user_name == null) ? 0 : fb_user_name.hashCode());
+        result = prime
+                * result
+                + ((fb_user_password == null) ? 0 : fb_user_password.hashCode());
         result = prime * result
-                + ((userName == null) ? 0 : userName.hashCode());
-        result = prime * result
-                + ((userPassword == null) ? 0 : userPassword.hashCode());
-        result = prime * result
-                + ((userPhone == null) ? 0 : userPhone.hashCode());
-        result = prime * result
-                + ((userStatus == null) ? 0 : userStatus.hashCode());
+                + ((fb_user_phone == null) ? 0 : fb_user_phone.hashCode());
         return result;
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -137,58 +53,82 @@ public class User implements Serializable {
         if (getClass() != obj.getClass())
             return false;
         User other = (User) obj;
-        if (createAt == null) {
-            if (other.createAt != null)
+        if (fb_created_at == null) {
+            if (other.fb_created_at != null)
                 return false;
-        } else if (!createAt.equals(other.createAt))
+        } else if (!fb_created_at.equals(other.fb_created_at))
             return false;
-        if (updateAt == null) {
-            if (other.updateAt != null)
+        if (fb_updated_at == null) {
+            if (other.fb_updated_at != null)
                 return false;
-        } else if (!updateAt.equals(other.updateAt))
+        } else if (!fb_updated_at.equals(other.fb_updated_at))
             return false;
-        if (userCardId == null) {
-            if (other.userCardId != null)
+        if (fb_user_id == null) {
+            if (other.fb_user_id != null)
                 return false;
-        } else if (!userCardId.equals(other.userCardId))
+        } else if (!fb_user_id.equals(other.fb_user_id))
             return false;
-        if (userCardPhoto == null) {
-            if (other.userCardPhoto != null)
+        if (fb_user_name == null) {
+            if (other.fb_user_name != null)
                 return false;
-        } else if (!userCardPhoto.equals(other.userCardPhoto))
+        } else if (!fb_user_name.equals(other.fb_user_name))
             return false;
-        if (userId != other.userId)
-            return false;
-        if (userName == null) {
-            if (other.userName != null)
+        if (fb_user_password == null) {
+            if (other.fb_user_password != null)
                 return false;
-        } else if (!userName.equals(other.userName))
+        } else if (!fb_user_password.equals(other.fb_user_password))
             return false;
-        if (userPassword == null) {
-            if (other.userPassword != null)
+        if (fb_user_phone == null) {
+            if (other.fb_user_phone != null)
                 return false;
-        } else if (!userPassword.equals(other.userPassword))
-            return false;
-        if (userPhone == null) {
-            if (other.userPhone != null)
-                return false;
-        } else if (!userPhone.equals(other.userPhone))
-            return false;
-        if (userStatus == null) {
-            if (other.userStatus != null)
-                return false;
-        } else if (!userStatus.equals(other.userStatus))
+        } else if (!fb_user_phone.equals(other.fb_user_phone))
             return false;
         return true;
     }
-
+    public Integer getFb_user_id() {
+        return fb_user_id;
+    }
+    public void setFb_user_id(Integer fb_user_id) {
+        this.fb_user_id = fb_user_id;
+    }
+    public String getFb_user_name() {
+        return fb_user_name;
+    }
+    public void setFb_user_name(String fb_user_name) {
+        this.fb_user_name = fb_user_name;
+    }
+    public String getFb_user_phone() {
+        return fb_user_phone;
+    }
+    public void setFb_user_phone(String fb_user_phone) {
+        this.fb_user_phone = fb_user_phone;
+    }
+    public String getFb_user_password() {
+        return fb_user_password;
+    }
+    public void setFb_user_password(String fb_user_password) {
+        this.fb_user_password = fb_user_password;
+    }
+    public Timestamp getFb_created_at() {
+        return fb_created_at;
+    }
+    public void setFb_created_at(Timestamp fb_created_at) {
+        this.fb_created_at = fb_created_at;
+    }
+    public Timestamp getFb_updated_at() {
+        return fb_updated_at;
+    }
+    public void setFb_updated_at(Timestamp fb_updated_at) {
+        this.fb_updated_at = fb_updated_at;
+    }
     @Override
     public String toString() {
-        return "User [userId=" + userId + ", userCardId=" + userCardId
-                + ", userName=" + userName + ", userCardPhoto=" + userCardPhoto
-                + ", userPhone=" + userPhone + ", userStatus=" + userStatus
-                + ", userPassword=" + userPassword + ", createAt=" + createAt
-                + ", updateAt=" + updateAt + "]";
+        return "User [fb_user_id=" + fb_user_id + ", fb_user_name="
+                + fb_user_name + ", fb_user_phone=" + fb_user_phone
+                + ", fb_user_password=" + fb_user_password + ", fb_created_at="
+                + fb_created_at + ", fb_updated_at=" + fb_updated_at + "]";
     }
+
+   
 
 }

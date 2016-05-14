@@ -5,5 +5,5 @@ import cn.rest.entity.User;
 
 public interface UserService {
     public void add(User user);
-    public boolean isExistPhone(String phone);
+    public boolean isExistedPhone(String phone);
 }

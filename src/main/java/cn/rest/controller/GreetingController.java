@@ -19,10 +19,10 @@ public class GreetingController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/hello.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> hello() {
         Map<String, Object> map = new HashMap<String, Object>();
-        User user = new User(0, "dasdsa", "ew", "ewqeqw", "da", 1, "sa", null, null);
+        User user = new User(null,"张三","15326761239","9876567",null,null);
         userService.add(user);
         map.put("message",user);
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
@@ -30,7 +30,7 @@ public class GreetingController {
     @RequestMapping(value = "/isExistPhone.do", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> isExistPhone(String phone) {
         Map<String, Object> map = new HashMap<String, Object>();
-        boolean flag = userService.isExistPhone(phone);
+        boolean flag = userService.isExistedPhone(phone);
         map.put("message",flag);
         return new ResponseEntity<Map<String, Object>>(map, HttpStatus.OK);
     }

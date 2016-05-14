@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isExistPhone(String phone) {
+    public boolean isExistedPhone(String phone) {
         List<User> users = userDao.getByPhone(phone);
         return users.size() != 0;
     }

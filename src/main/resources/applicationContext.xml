@@ -34,7 +34,7 @@
     </bean>
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="ds"></property>
-        <property name="mapperLocations" value="classpath:cn/rest/dao/*.xml"></property>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
     </bean>
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="cn.rest.dao"></property>

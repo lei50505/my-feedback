@@ -1,6 +1,6 @@
 CREATE DATABASE `my-feedback` DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
 
-USE `web`;
+USE `my-feedback`;
 
 CREATE TABLE `fb_user` (
   `fb_user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,

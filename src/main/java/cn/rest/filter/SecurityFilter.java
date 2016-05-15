@@ -12,9 +12,13 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONObject;
+
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+
+import cn.rest.util.ResponseDto;
 
 @Component
 public class SecurityFilter implements Filter {
@@ -35,9 +39,11 @@ public class SecurityFilter implements Filter {
         log.info("SecurityFilter过滤前 " );
         if ("1".equals(request.getParameter("id"))) {
             response.setContentType("application/json");
-            response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setStatus(HttpStatus.OK.value());
             PrintWriter writer = response.getWriter();
-            writer.write("{\"message\":\"error\"}");
+            ResponseDto<Object> resDto = new ResponseDto<Object>(40000,"error",null);
+            JSONObject jsonObject = JSONObject.fromObject(resDto);
+            writer.write(jsonObject.toString());
             writer.flush();
             writer.close();
             return;

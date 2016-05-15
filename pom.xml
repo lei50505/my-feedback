@@ -21,21 +21,23 @@
 		<!-- jackson版本 -->
 		<jackson.version>2.6.3</jackson.version>
 		<!-- log4j版本 -->
-        <log4j.version>1.2.17</log4j.version>
-        <!-- aspectjweaver版本 -->
-        <aspectjweaver.version>1.8.7</aspectjweaver.version>
-        <!-- servlet-api版本 -->
-        <servlet-api.version>2.5</servlet-api.version>
-        <!-- mysql-connector-java版本 -->
-        <mysql-connector-java.version>5.1.37</mysql-connector-java.version>
-        <!-- commons-dbcp版本 -->
-        <commons-dbcp.version>1.4</commons-dbcp.version>
-        <!-- mybatis-spring版本 -->
-        <mybatis-spring.version>1.2.3</mybatis-spring.version>
-        <!-- mybatis版本 -->
-        <mybatis.version>3.3.0</mybatis.version>
-        <!-- commons-lang3版本 -->
-        <commons-lang3.version>3.3.2</commons-lang3.version>
+		<log4j.version>1.2.17</log4j.version>
+		<!-- aspectjweaver版本 -->
+		<aspectjweaver.version>1.8.7</aspectjweaver.version>
+		<!-- servlet-api版本 -->
+		<servlet-api.version>2.5</servlet-api.version>
+		<!-- mysql-connector-java版本 -->
+		<mysql-connector-java.version>5.1.37</mysql-connector-java.version>
+		<!-- commons-dbcp版本 -->
+		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<!-- mybatis-spring版本 -->
+		<mybatis-spring.version>1.2.3</mybatis-spring.version>
+		<!-- mybatis版本 -->
+		<mybatis.version>3.3.0</mybatis.version>
+		<!-- commons-lang3版本 -->
+		<commons-lang3.version>3.3.2</commons-lang3.version>
+		<!-- json-lib版本 -->
+		<json-lib.version>2.4</json-lib.version>
 	</properties>
 	<dependencies>
 		<!-- junit单元测试 -->
@@ -72,70 +74,84 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<!-- log4j -->
-        <!-- log4j-1.2.17.jar -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
-        <!-- aspectjweaver -->
-        <!-- aspectjweaver-1.8.7.jar -->
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectjweaver.version}</version>
-        </dependency>
-        <!-- servlet-api -->
-        <!-- servlet-api-2.5.jar -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${servlet-api.version}</version>
-        </dependency>
-        <!-- mysql-connector-java -->
-        <!-- mysql-connector-java-5.1.37.jar -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
-        <!-- commons-dbcp -->
-        <!-- commons-dbcp-1.4.jar -->
-        <!-- commons-pool-1.5.4.jar -->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>${commons-dbcp.version}</version>
-        </dependency>
-        <!-- mybatis-spring -->
-        <!-- mybatis-spring-1.2.3.jar -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>${mybatis-spring.version}</version>
-        </dependency>
-        <!-- mybatis -->
-        <!-- mybatis-3.3.0.jar -->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis.version}</version>
-        </dependency>
-        <!-- spring-jdbc -->
-        <!-- spring-jdbc-4.2.3.RELEASE.jar -->
-        <!-- spring-tx-4.2.3.RELEASE.jar -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <!-- commons-lang3 -->
-        <!-- commons-lang3-3.3.2.jar -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
+		<!-- log4j-1.2.17.jar -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>${log4j.version}</version>
+		</dependency>
+		<!-- aspectjweaver -->
+		<!-- aspectjweaver-1.8.7.jar -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectjweaver.version}</version>
+		</dependency>
+		<!-- servlet-api -->
+		<!-- servlet-api-2.5.jar -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+		</dependency>
+		<!-- mysql-connector-java -->
+		<!-- mysql-connector-java-5.1.37.jar -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+		</dependency>
+		<!-- commons-dbcp -->
+		<!-- commons-dbcp-1.4.jar -->
+		<!-- commons-pool-1.5.4.jar -->
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>${commons-dbcp.version}</version>
+		</dependency>
+		<!-- mybatis-spring -->
+		<!-- mybatis-spring-1.2.3.jar -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
+		<!-- mybatis -->
+		<!-- mybatis-3.3.0.jar -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<!-- spring-jdbc -->
+		<!-- spring-jdbc-4.2.3.RELEASE.jar -->
+		<!-- spring-tx-4.2.3.RELEASE.jar -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<!-- commons-lang3 -->
+		<!-- commons-lang3-3.3.2.jar -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+		<!-- json-lib -->
+		<!-- - commons-logging-1.2.jar -->
+		<!-- json-lib-2.4-jdk15.jar -->
+		<!-- commons-beanutils-1.8.0.jar -->
+		<!-- commons-collections-3.2.1.jar -->
+		<!-- commons-lang-2.5.jar -->
+		<!-- commons-logging-1.1.1.jar -->
+		<!-- ezmorph-1.0.6.jar -->
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>${json-lib.version}</version>
+			<classifier>jdk15</classifier>
+		</dependency>
 	</dependencies>
 	<build>
 		<!-- 解决eclipse升级报错 -->

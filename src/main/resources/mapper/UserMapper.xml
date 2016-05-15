@@ -7,14 +7,60 @@
 		insert into `fb_user`(
 		`fb_user_name`,
 		`fb_user_phone`,
-		`fb_user_password`)
+		`fb_user_password`,
+		`fb_user_status`)
 		values(
 		#{fb_user_name,jdbcType=VARCHAR},
 		#{fb_user_phone,jdbcType=VARCHAR},
-		#{fb_user_password,jdbcType=VARCHAR}
+		#{fb_user_password,jdbcType=VARCHAR},
+		0
 		)
 	</insert>
-	<select id="getByPhone" resultType="cn.rest.entity.User">
-		select * from fb_user where fb_user_phone = #{phone,jdbcType=VARCHAR}
+
+	<update id="updateByPkSelective" parameterType="cn.rest.entity.User">
+		update fb_user
+		<set>
+			<if test="fb_shop_id != null">
+				fb_shop_id = #{fb_shop_id,jdbcType=INTEGER},
+			</if>
+			<if test="fb_user_name != null">
+				fb_user_name = #{fb_user_name,jdbcType=VARCHAR},
+			</if>
+			<if test="fb_user_phone != null">
+				fb_user_phone = #{fb_user_phone,jdbcType=VARCHAR},
+			</if>
+			<if test="fb_user_password != null">
+				fb_user_password = #{fb_user_password,jdbcType=VARCHAR},
+			</if>
+			<if test="fb_user_status != null">
+				fb_user_status = #{fb_user_status,jdbcType=INTEGER},
+			</if>
+			<if test="fb_user_token != null">
+				fb_user_token = #{fb_user_token,jdbcType=VARCHAR},
+			</if>
+			<if test="fb_expired_at != null">
+				fb_expired_at = #{fb_expired_at,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
+	</update>
+	<sql id="Base_Column_List">
+		fb_user_id,
+		fb_shop_id,
+		fb_user_name,
+		fb_user_phone,
+		fb_user_password,
+		fb_user_status,
+		fb_user_token,
+		fb_expired_at,
+		fb_created_at,
+		fb_updated_at
+	</sql>
+	<select id="selectByPk" resultType="cn.rest.entity.User"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from fb_user
+		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
 	</select>
 </mapper>

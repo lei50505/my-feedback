@@ -11,7 +11,7 @@ SET FOREIGN_KEY_CHECKS=0;
 
 DROP TABLE IF EXISTS `fb_shop`;
 CREATE TABLE `fb_shop` (
-  `fb_shop_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `fb_shop_id` int(10) NOT NULL AUTO_INCREMENT,
   `fb_shop_name` varchar(30) NOT NULL,
   `fb_shop_phone` varchar(30) NOT NULL,
   `fb_shop_address` varchar(200) NOT NULL,
@@ -47,10 +47,10 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `fb_shop_task`;
 CREATE TABLE `fb_shop_task` (
-  `fb_shop_task_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fb_shop_id` int(10) unsigned NOT NULL,
+  `fb_shop_task_id` int(10) NOT NULL AUTO_INCREMENT,
+  `fb_shop_id` int(10) NOT NULL,
   `fb_shop_task_email` varchar(30) NOT NULL,
-  `fb_shop_task_status` tinyint(1) NOT NULL,
+  `fb_shop_task_status` tinyint(4) NOT NULL COMMENT '0:stop,1:start',
   `fb_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fb_updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`fb_shop_task_id`),
@@ -81,12 +81,12 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `fb_user`;
 CREATE TABLE `fb_user` (
-  `fb_user_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fb_shop_id` int(10) unsigned DEFAULT NULL,
+  `fb_user_id` int(10) NOT NULL AUTO_INCREMENT,
+  `fb_shop_id` int(10) DEFAULT NULL,
   `fb_user_name` varchar(30) NOT NULL,
   `fb_user_phone` varchar(30) NOT NULL,
   `fb_user_password` varchar(30) NOT NULL,
-  `fb_user_status` tinyint(1) NOT NULL,
+  `fb_user_status` tinyint(4) NOT NULL COMMENT '0:free,1:apply,2:accept',
   `fb_user_token` varchar(30) DEFAULT NULL,
   `fb_expired_at` timestamp NULL DEFAULT NULL,
   `fb_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -120,13 +120,13 @@ DELIMITER ;
 
 DROP TABLE IF EXISTS `fb_feedback`;
 CREATE TABLE `fb_feedback` (
-  `fb_feedback_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fb_user_id` int(10) unsigned NOT NULL,
-  `fb_shop_id` int(10) unsigned NOT NULL,
+  `fb_feedback_id` int(10) NOT NULL AUTO_INCREMENT,
+  `fb_user_id` int(10) NOT NULL,
+  `fb_shop_id` int(10) NOT NULL,
   `fb_feedback_phone` varchar(30) NOT NULL,
   `fb_feedback_content` varchar(200) DEFAULT NULL,
-  `fb_feedback_type` tinyint(1) NOT NULL,
-  `fb_feedback_status` tinyint(1) NOT NULL,
+  `fb_feedback_type` tinyint(4) NOT NULL COMMENT '0:good,1:normal,2:bad',
+  `fb_feedback_status` tinyint(4) NOT NULL COMMENT '0:new,1:deal',
   `fb_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fb_updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`fb_feedback_id`),

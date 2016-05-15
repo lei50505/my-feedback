@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="cn.rest.dao.FeedbackDao">
+	<insert id="insert" parameterType="cn.rest.entity.Feedback"
+		useGeneratedKeys="true" keyProperty="fb_feedback_id">
+		insert into `fb_feedback`(
+		`fb_user_id`,
+		`fb_shop_id`,
+		`fb_feedback_phone`,
+		`fb_feedback_content`,
+		`fb_feedback_type`,
+		`fb_feedback_status`
+		)
+		values (
+		#{fb_user_id,jdbcType=INTEGER},
+		#{fb_shop_id,jdbcType=INTEGER},
+		#{fb_feedback_phone,jdbcType=VARCHAR},
+		#{fb_feedback_content,jdbcType=VARCHAR},
+		#{fb_feedback_type,jdbcType=INTEGER},
+		0
+		)
+	</insert>
+	<update id="updateByPkSelective" parameterType="cn.rest.entity.Feedback">
+		update fb_feedback
+		<set>
+			<if test="fb_feedback_status != null">
+				fb_feedback_status =
+				#{fb_feedback_status,jdbcType=INTEGER},
+			</if>
+		</set>
+		where fb_feedback_id = #{fb_feedback_id,jdbcType=INTEGER}
+	</update>
+	<sql id="Base_Column_List">
+		fb_feedback_id,
+		fb_user_id,
+		fb_shop_id,
+		fb_feedback_phone,
+		fb_feedback_content,
+		fb_feedback_type,
+		fb_feedback_status,
+		fb_created_at,
+		fb_updated_at
+	</sql>
+	<select id="selectByPk" resultType="cn.rest.entity.Feedback"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from fb_feedback
+		where fb_feedback_id =
+		#{fb_feedback_id,jdbcType=INTEGER}
+	</select>
+</mapper>

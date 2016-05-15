@@ -1,7 +1,5 @@
 package cn.rest.service.impl;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +19,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isExistedPhone(String phone) {
-        List<User> users = userDao.getByPhone(phone);
-        return users.size() != 0;
+    public User getByPk(int userId) {
+        return userDao.selectByPk(userId);
     }
 
 }

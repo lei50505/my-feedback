@@ -1,10 +1,9 @@
 package cn.rest.dao;
 
-import java.util.List;
-
 import cn.rest.entity.User;
 
 public interface UserDao {
-    public void insert(User user);
-    public List<User> getByPhone(String phone);
+    void insert(User user);
+    void updateByPkSelective(User user);
+    User selectByPk(Integer fb_user_id);
 }

@@ -38,6 +38,10 @@
 		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<!-- json-lib版本 -->
 		<json-lib.version>2.4</json-lib.version>
+		<!-- commons-codec版本 -->
+		<commons-codec.version>1.10</commons-codec.version>
+		<!-- jedis版本 -->
+		<jedis.version>2.8.1</jedis.version>
 	</properties>
 	<dependencies>
 		<!-- junit单元测试 -->
@@ -151,6 +155,21 @@
 			<artifactId>json-lib</artifactId>
 			<version>${json-lib.version}</version>
 			<classifier>jdk15</classifier>
+		</dependency>
+		<!-- commons-codec -->
+		<!-- commons-codec-1.10.jar -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
+		</dependency>
+		<!-- jedis -->
+		<!-- jedis-2.8.1.jar -->
+		<!-- commons-pool2-2.4.2.jar -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

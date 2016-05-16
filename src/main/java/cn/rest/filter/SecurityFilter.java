@@ -36,6 +36,7 @@ public class SecurityFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         //解决跨域问题
         response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type");
         log.info("SecurityFilter过滤前 " );
         if ("1".equals(request.getParameter("id"))) {
             response.setContentType("application/json");

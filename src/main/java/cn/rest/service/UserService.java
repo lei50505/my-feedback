@@ -6,4 +6,5 @@ import cn.rest.entity.User;
 public interface UserService {
     void add(User user);
     User getByPk(int userId);
+    int getSign(String phone);
 }

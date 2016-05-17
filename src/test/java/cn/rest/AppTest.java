@@ -1,9 +1,5 @@
 package cn.rest;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import redis.clients.jedis.Jedis;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -41,9 +37,8 @@ public class AppTest
     }
     
     public static void main(String[] args) {
-        Jedis jedis = new Jedis("localhost",6379);
-        jedis.set("aaa", "123");
-        System.out.println(jedis.get("aaa"));
-        jedis.close();
+            Integer a = new Integer(10);
+            Integer b =10;
+            System.out.println(a.equals(b));
     }
 }

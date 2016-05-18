@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.rest.dao.UserDao;
 import cn.rest.entity.User;
 import cn.rest.service.FeedbackService;
 import cn.rest.service.ShopService;
@@ -24,6 +25,9 @@ public class GreetingController {
     private UserService userService;
     
     @Autowired
+    private UserDao userDao;
+    
+    @Autowired
     private ShopService shopService;
     
     @Autowired
@@ -34,9 +38,9 @@ public class GreetingController {
 
     @RequestMapping(value = "/hello", method = RequestMethod.GET)
     public ResponseEntity<Object> hello() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        User user = new User(null,null, "张三","15326761237","9876567",null,null, null, null, null);
-        userService.add(user);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        User user = new User(null,null, "张三","15326761237","9876567",null,null, null, null, null);
+//        userService.add(user);
 //        Shop shop = new Shop(null, "a", "15326761239", "c", "23", "搜索`", null, null, null,null);
 //        shopService.add(shop);
 //        ShopTask st = new ShopTask(null, shop.getFb_shop_id(), "a", null, null, null);
@@ -44,9 +48,12 @@ public class GreetingController {
 //        Feedback feedback = new Feedback(null, user.getFb_user_id(), shop.getFb_shop_id(), "a", null, 0, null, null, null);
 //        feedbackService.add(feedback);
 //        shopTaskService.deleteByPk(2);
-        User user2 = userService.getByPk(2);
-        map.put("message",user2);
-        return ResponseUtils.get(10000, null, user2);
+        User user=new User();
+        user.setFb_user_id(2);
+        user.setFb_user_token("adasdasdasd");
+        userDao.updateByPkSelective(user);
+//        map.put("message",user2);
+        return ResponseUtils.get(10000, null, user);
     }
 
     @RequestMapping(value = "/isExistPhone.do", method = RequestMethod.GET)

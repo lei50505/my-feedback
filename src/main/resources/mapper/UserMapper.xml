@@ -44,6 +44,27 @@
 		</set>
 		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
 	</update>
+	<update id="updateByPk" parameterType="cn.rest.entity.User">
+		update fb_user
+		set
+		fb_shop_id = #{fb_shop_id,jdbcType=INTEGER},
+		fb_user_name =
+		#{fb_user_name,jdbcType=VARCHAR},
+		fb_user_phone =
+		#{fb_user_phone,jdbcType=VARCHAR},
+		fb_user_password =
+		#{fb_user_password,jdbcType=VARCHAR},
+		fb_user_status =
+		#{fb_user_status,jdbcType=INTEGER},
+		fb_user_token =
+		#{fb_user_token,jdbcType=VARCHAR},
+		fb_expired_at =
+		#{fb_expired_at,jdbcType=TIMESTAMP}
+		where
+		fb_user_id =
+		#{fb_user_id,jdbcType=INTEGER}
+	</update>
+
 	<sql id="Base_Column_List">
 		fb_user_id,
 		fb_shop_id,
@@ -62,5 +83,19 @@
 		<include refid="Base_Column_List" />
 		from fb_user
 		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
+	</select>
+	<select id="getByPhone" resultType="cn.rest.entity.User"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from fb_user
+		where fb_user_phone = #{fb_user_phone,jdbcType=VARCHAR}
+	</select>
+	<select id="getByToken" resultType="cn.rest.entity.User"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from fb_user
+		where fb_user_token = #{fb_user_token,jdbcType=VARCHAR}
 	</select>
 </mapper>

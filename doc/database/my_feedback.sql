@@ -17,12 +17,13 @@ CREATE TABLE `fb_shop` (
   `fb_shop_address` varchar(200) NOT NULL,
   `fb_shop_email` varchar(30) NOT NULL,
   `fb_shop_password` varchar(30) NOT NULL,
-  `fb_shop_token` varchar(30) DEFAULT NULL,
+  `fb_shop_token` varchar(60) DEFAULT NULL,
   `fb_expired_at` timestamp NULL DEFAULT NULL,
   `fb_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fb_updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`fb_shop_id`),
-  UNIQUE KEY `fb_shop_email` (`fb_shop_email`)
+  UNIQUE KEY `fb_shop_email` (`fb_shop_email`),
+  UNIQUE KEY `fb_shop_token` (`fb_shop_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 DROP TRIGGER IF EXISTS `fb_shop_insert_trigger`;
@@ -87,7 +88,7 @@ CREATE TABLE `fb_user` (
   `fb_user_phone` varchar(30) NOT NULL,
   `fb_user_password` varchar(30) NOT NULL,
   `fb_user_status` tinyint(4) NOT NULL COMMENT '0:free,1:apply,2:accept',
-  `fb_user_token` varchar(30) DEFAULT NULL,
+  `fb_user_token` varchar(60) DEFAULT NULL,
   `fb_expired_at` timestamp NULL DEFAULT NULL,
   `fb_created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `fb_updated_at` timestamp NULL DEFAULT NULL,

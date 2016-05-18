@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.rest.entity.User;
+import cn.rest.exception.InvalidPasswordException;
+import cn.rest.exception.UserNotFoundException;
 import cn.rest.service.UserService;
 import cn.rest.util.ConfigUtils;
 import cn.rest.util.RedisUtils;
@@ -28,7 +30,7 @@ public class UserController {
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
     public ResponseEntity<Object> add(User user, Integer fb_sign) {
         Integer validSign;
-        
+
         String key = "fb_sign_" + user.getFb_user_phone();
         try {
             validSign = RedisUtils.getInt(key);
@@ -58,10 +60,41 @@ public class UserController {
         } catch (Exception e) {
             return ResponseUtils.get(40001, "发送验证码失败", null);
         }
-
         if (ConfigUtils.getInt("conf.msg.send") == 0) {
             return ResponseUtils.get(20001, null, sign);
         }
         return ResponseUtils.get(20000, null, null);
+    }
+
+    @RequestMapping(value = "/phone/exist/{phone}", method = RequestMethod.GET)
+    public ResponseEntity<Object> existPhone(@PathVariable String phone) {
+        boolean flag = userService.existPhone(phone);
+        return ResponseUtils.get(20000, null, flag);
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST )
+    public ResponseEntity<Object> login(String fb_user_phone,
+            String fb_user_password) {
+        String token = null;
+
+        try {
+            token = userService.login(fb_user_phone, fb_user_password);
+        } catch (UserNotFoundException e) {
+            return ResponseUtils.get(20001, null, "用户不存在");
+        } catch (InvalidPasswordException e) {
+            return ResponseUtils.get(20002, null, "密码错误");
+        }
+        return ResponseUtils.get(20000, null, token);
+    }
+    
+    @RequestMapping(value="/token",method=RequestMethod.POST)
+    public ResponseEntity<Object> validToken(String fb_user_token){
+        boolean validFlag = userService.validToken(fb_user_token);
+        if(validFlag){
+            return ResponseUtils.get(20000, null, null);
+        }else{
+            return ResponseUtils.get(20001, null, null);
+        }
+        
     }
 }

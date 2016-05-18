@@ -33,6 +33,12 @@
         <property name="url" value="${db.url}"></property>
         <property name="username" value="${db.user}"></property>
         <property name="password" value="${db.password}"></property>
+        <property name="validationQuery" value="select 1"></property>
+        <property name="testOnBorrow" value="true"></property>
+        <property name="testOnReturn" value="true"></property>
+        <property name="testWhileIdle" value="true"></property>
+        <property name="minEvictableIdleTimeMillis" value="1800000"></property>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"></property>
     </bean>
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="ds"></property>
@@ -58,6 +64,8 @@
             <tx:method name="add*" propagation="REQUIRED" />
             <tx:method name="delete*" propagation="REQUIRED" />
             <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="login*" propagation="REQUIRED" />
+            <tx:method name="valid*" propagation="REQUIRED" />
             <tx:method name="*" read-only="true" />
         </tx:attributes>
     </tx:advice>

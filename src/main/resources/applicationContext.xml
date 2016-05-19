@@ -60,13 +60,7 @@
     <!-- 配置事务 -->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
-            <tx:method name="get*" propagation="NOT_SUPPORTED" />
-            <tx:method name="add*" propagation="REQUIRED" />
-            <tx:method name="delete*" propagation="REQUIRED" />
-            <tx:method name="update*" propagation="REQUIRED" />
-            <tx:method name="login*" propagation="REQUIRED" />
-            <tx:method name="valid*" propagation="REQUIRED" />
-            <tx:method name="*" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" />
         </tx:attributes>
     </tx:advice>
     <aop:config expose-proxy="true">

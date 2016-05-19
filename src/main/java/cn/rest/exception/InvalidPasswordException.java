@@ -1,11 +1,11 @@
 package cn.rest.exception;
 
-public class InvalidPasswordException extends Exception {
+public class InvalidPasswordException extends ServiceException {
 
     private static final long serialVersionUID = 1L;
     
-    public InvalidPasswordException(String message){
-        super(message);
+    public InvalidPasswordException(){
+        super(ErrorCode.InvalidPasswordError);
         
     }
 

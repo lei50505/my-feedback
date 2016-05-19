@@ -10,6 +10,7 @@ public enum ErrorCode {
     UserExistError(40023,"用户已存在"),
     SignNotFoundError(40024,"没有获取验证码"),
     InvalidSignError(40024,"验证码错误"),
+    EmailExistError(40031,"邮箱已存在"),
     SystemError(50001,"服务异常")
     ;
     private int code;

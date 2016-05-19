@@ -64,4 +64,12 @@
 		from fb_shop
 		where fb_shop_id = #{fb_shop_id,jdbcType=INTEGER}
 	</select>
+	<select id="getByEmail" resultType="cn.rest.entity.Shop"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from fb_shop
+		where fb_shop_email = #{fb_shop_email,jdbcType=VARCHAR}
+	</select>
+	
 </mapper>

@@ -5,7 +5,7 @@ public enum ErrorCode {
     PhoneNotExistError(40011,"电话号码不存在"),
     ParamNullError(40012,"参数不能为空"),
     ParamFormatError(40013,"参数有误"),
-    PhoneExistError(40014,"手机号码已存在"),
+    PhoneExistError(40014,"手机号码已存在1"),
     InvalidPasswordError(40021,"密码错误"),
     UserNotFoundError(40022,"用户不存在"),
     UserExistError(40023,"用户已存在"),

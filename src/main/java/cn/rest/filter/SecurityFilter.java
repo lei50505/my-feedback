@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import cn.rest.util.ResponseDto;
+import cn.rest.response.ResponseDto;
 
 @Component
 public class SecurityFilter implements Filter {

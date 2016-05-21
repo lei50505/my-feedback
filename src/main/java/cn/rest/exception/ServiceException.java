@@ -11,12 +11,6 @@ public class ServiceException extends Exception {
         this.code = ec.getCode();
         this.message = ec.getMessage();
     }
-    
-    public ServiceException(ErrorCode ec,Throwable e) {
-        super(e);
-        this.code = ec.getCode();
-        this.message = ec.getMessage();
-    }
 
     public int getCode() {
         return this.code;

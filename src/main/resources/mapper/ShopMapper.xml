@@ -18,6 +18,25 @@
 		#{fb_shop_password,jdbcType=VARCHAR})
 	</insert>
 
+	<update id="updateById" parameterType="cn.rest.entity.Shop">
+		update `fb_shop` set
+		`fb_shop_name` = #{fb_shop_name,jdbcType=VARCHAR},
+		`fb_shop_phone` =
+		#{fb_shop_phone,jdbcType=VARCHAR},
+		`fb_shop_address` =
+		#{fb_shop_address,jdbcType=VARCHAR},
+		`fb_shop_email` =
+		#{fb_shop_email,jdbcType=VARCHAR},
+		`fb_shop_password` =
+		#{fb_shop_password,jdbcType=VARCHAR},
+		`fb_shop_token` =
+		#{fb_shop_token,jdbcType=VARCHAR},
+		`fb_expired_at` =
+		#{fb_expired_at,jdbcType=TIMESTAMP}
+		where `fb_shop_id` =
+		#{fb_shop_id,jdbcType=INTEGER}
+	</update>
+
 	<update id="updateByPkSelective" parameterType="cn.rest.entity.Shop">
 		update fb_shop
 		<set>
@@ -71,5 +90,5 @@
 		from fb_shop
 		where fb_shop_email = #{fb_shop_email,jdbcType=VARCHAR}
 	</select>
-	
+
 </mapper>

@@ -10,14 +10,9 @@ import org.springframework.stereotype.Service;
 
 import cn.rest.dao.UserDao;
 import cn.rest.entity.User;
-import cn.rest.exception.InvalidPasswordException;
-import cn.rest.exception.InvalidSignException;
-import cn.rest.exception.ParamFormatException;
-import cn.rest.exception.PhoneExistException;
-import cn.rest.exception.SignNotFoundException;
-import cn.rest.exception.SystemException;
-import cn.rest.exception.UserExistException;
-import cn.rest.exception.UserNotFoundException;
+import cn.rest.exception.ErrorCode;
+import cn.rest.exception.ErrorUtils;
+import cn.rest.exception.ServiceException;
 import cn.rest.service.UserService;
 import cn.rest.util.Md5Utils;
 import cn.rest.util.PhoneUtils;
@@ -29,81 +24,113 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-    public void addUser(User user) throws SystemException,
-            ParamFormatException, UserExistException {
+    public static void paramNotNull(Object o) throws ServiceException {
+        if (o == null) {
+            throw ErrorUtils.get(ErrorCode.ParamNullError);
+        }
+    }
 
-        if (user == null) {
-            throw new ParamFormatException();
+    public static void validParamPhone(String phone) throws ServiceException {
+        paramNotNull(phone);
+        if (!phone.matches("\\d{11}")) {
+            throw ErrorUtils.get(ErrorCode.PhoneFormatError);
         }
-        if (user.getFb_user_name() == null) {
-            throw new ParamFormatException();
-        }
-        if (user.getFb_user_password() == null) {
-            throw new ParamFormatException();
-        }
-        if (user.getFb_user_phone() == null) {
-            throw new ParamFormatException();
-        }
+    }
+
+    public void addUser(User user) throws ServiceException {
+
+        paramNotNull(user);
+        paramNotNull(user.getFb_user_name());
+        paramNotNull(user.getFb_user_password());
         User validUser = getUserByPhone(user.getFb_user_phone());
 
         if (validUser != null) {
-            throw new UserExistException();
+            throw ErrorUtils.get(ErrorCode.UserExistError);
         }
         encodePsw(user);
         try {
             userDao.insert(user);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
 
     }
 
-    public User getUserByPk(int userId) throws SystemException {
+    public User getUserByPk(int userId) throws ServiceException {
         User user = null;
         try {
             user = userDao.selectByPk(userId);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
         return user;
     }
 
-    public static String encodePsw(String psw) {
+    public static String encodePsw(String psw) throws ServiceException {
+        paramNotNull(psw);
         return Md5Utils.strToStr3(psw);
     }
 
-    public static void encodePsw(User user) {
+    public static void encodePsw(User user) throws ServiceException {
+        paramNotNull(user);
         String psw = user.getFb_user_password();
         String encodePsw = encodePsw(psw);
         user.setFb_user_password(encodePsw);
     }
 
+    public static void setPhoneMsgSignToRedis(String phone, int sign)
+            throws ServiceException {
+        validParamPhone(phone);
+        try {
+            RedisUtils.setIntWithExprSs("fb_sign_" + phone, sign, 60 * 5);
+        } catch (Exception e) {
+            throw ErrorUtils.get(e);
+        }
+    }
+    public static void delPhoneMsgSignFromRedis(String phone)
+            throws ServiceException {
+        validParamPhone(phone);
+        try {
+            RedisUtils.del("fb_sign_" + phone);
+        } catch (Exception e) {
+            throw ErrorUtils.get(e);
+        }
+    }
+
+    public static Integer getPhoneMsgSignFromRedis(String phone)
+            throws ServiceException {
+        validParamPhone(phone);
+        try {
+            return RedisUtils.getInt("fb_sign_" + phone);
+        } catch (Exception e) {
+            throw ErrorUtils.get(e);
+        }
+    }
+
+    public static int createPhoneMsgSign() {
+        Random random = new Random();
+        return random.nextInt(899999) + 100000;
+    }
+
     @Override
-    public int getMsgSign(String phone) throws SystemException,
-            ParamFormatException, PhoneExistException {
+    public int sendPhoneMsgSign(String phone) throws ServiceException {
         User user = getUserByPhone(phone);
         if (user != null) {
-            throw new PhoneExistException();
+            throw ErrorUtils.get(ErrorCode.PhoneExistError);
         }
-        Random random = new Random();
-        int num = random.nextInt(899999) + 100000;
-        try {
-            RedisUtils.setIntWithExprSs("fb_sign_" + phone, num, 60 * 5);
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        int num = createPhoneMsgSign();
+        setPhoneMsgSignToRedis(phone, num);
         String msg = "在5分钟内有效，您的验证码为：" + num;
         try {
             PhoneUtils.sendMsg(phone, msg);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
         return num;
     }
 
     @Override
-    public boolean existPhone(String phone) throws ParamFormatException,
-            SystemException {
+    public boolean existPhone(String phone) throws ServiceException {
         User user = getUserByPhone(phone);
         if (user == null) {
             return false;
@@ -112,17 +139,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String userLogin(String phone, String psw)
-            throws UserNotFoundException, InvalidPasswordException,
-            ParamFormatException, SystemException {
+    public String userLogin(String phone, String psw) throws ServiceException {
         User validUser = getUserByPhone(phone);
         if (validUser == null) {
-            throw new UserNotFoundException();
+            throw ErrorUtils.get(ErrorCode.UserNotFoundError);
         }
         String inputPsw = encodePsw(psw);
         String validPsw = validUser.getFb_user_password();
         if (!validPsw.equals(inputPsw)) {
-            throw new InvalidPasswordException();
+            throw ErrorUtils.get(ErrorCode.InvalidPasswordError);
         }
         String token = UUID.randomUUID().toString();
 
@@ -134,16 +159,13 @@ public class UserServiceImpl implements UserService {
         return token;
     }
 
-    public User getUserByToken(String token) throws ParamFormatException,
-            SystemException {
-        if (token == null) {
-            throw new ParamFormatException();
-        }
+    public User getUserByToken(String token) throws ServiceException {
+        paramNotNull(token);
         User user = null;
         try {
             user = userDao.getByToken(token);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
 
         if (user.getFb_expired_at().getTime() < new Date().getTime()) {
@@ -155,74 +177,44 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    public User getUserByPhone(String phone) throws ParamFormatException,
-            SystemException {
-        String phoneReg = "\\d{11}";
-        if (phone == null) {
-            throw new ParamFormatException();
-        }
-        if (!phone.matches(phoneReg)) {
-            throw new ParamFormatException();
-        }
+    public User getUserByPhone(String phone) throws ServiceException {
+        validParamPhone(phone);
         User user = null;
         try {
             user = userDao.getByPhone(phone);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
         return user;
     }
 
-    public void updateUserByPk(User user) throws ParamFormatException,
-            SystemException {
-        if (user == null) {
-            throw new ParamFormatException();
-        }
-        if (user.getFb_user_id() == null) {
-            throw new ParamFormatException();
-        }
+    public void updateUserByPk(User user) throws ServiceException {
+        paramNotNull(user);
+        paramNotNull(user.getFb_user_id());
+        paramNotNull(user.getFb_user_name());
+        paramNotNull(user.getFb_user_password());
+        paramNotNull(user.getFb_user_phone());
         try {
             userDao.updateByPk(user);
         } catch (Exception e) {
-            throw new SystemException(e);
+            throw ErrorUtils.get(e);
         }
     }
 
     @Override
-    public void addUserBySign(User user, Integer sign)
-            throws ParamFormatException, SystemException,
-            SignNotFoundException, InvalidSignException, UserExistException {
-        if (sign == null) {
-            throw new ParamFormatException();
-        }
-        if (user == null) {
-            throw new ParamFormatException();
-        }
+    public void addUserBySign(User user, Integer sign) throws ServiceException {
+        paramNotNull(sign);
+        paramNotNull(user);
         String phone = user.getFb_user_phone();
-        if (phone == null) {
-            throw new ParamFormatException();
-        }
-        Integer validSign = null;
-
-        try {
-            validSign = RedisUtils.getInt("fb_sign_" + phone);
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        Integer validSign = getPhoneMsgSignFromRedis(phone);
         if (validSign == null) {
-            throw new SignNotFoundException();
+            throw ErrorUtils.get(ErrorCode.SignNotFoundError);
         }
-
         if (!validSign.equals(sign)) {
-            throw new InvalidSignException();
+            throw ErrorUtils.get(ErrorCode.InvalidSignError);
         }
-        try {
-            RedisUtils.del("fb_sign_" + phone);
-        } catch (Exception e) {
-            throw new SystemException(e);
-        }
+        delPhoneMsgSignFromRedis(phone);
         addUser(user);
-
     }
 
 }

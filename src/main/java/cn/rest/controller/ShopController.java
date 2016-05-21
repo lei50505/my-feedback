@@ -7,13 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.rest.entity.Shop;
-import cn.rest.exception.EmailExistException;
-import cn.rest.exception.InvalidSignException;
-import cn.rest.exception.ParamFormatException;
-import cn.rest.exception.SignNotFoundException;
-import cn.rest.exception.SystemException;
+import cn.rest.exception.ServiceException;
+import cn.rest.response.ResponseUtils;
 import cn.rest.service.ShopService;
-import cn.rest.util.ResponseUtils;
 
 @RequestMapping("/shop")
 @RestController
@@ -27,10 +23,10 @@ public class ShopController {
         int sign = 0;
         try {
             sign = shopService.sendEmailSign(fb_shop_email);
-        } catch (ParamFormatException | SystemException | EmailExistException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, sign);
+        return ResponseUtils.get(sign);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -38,10 +34,21 @@ public class ShopController {
 
         try {
             shopService.addShop(shop, fb_shop_sign);
-        } catch (ParamFormatException | SystemException | SignNotFoundException
-                | InvalidSignException | EmailExistException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, null);
+        return ResponseUtils.get();
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> login(String fb_shop_email,
+            String fb_shop_password) {
+        String token = null;
+        try {
+            token = shopService.login(fb_shop_email, fb_shop_password);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
+        }
+        return ResponseUtils.get(token);
     }
 }

@@ -1,28 +1,16 @@
 package cn.rest.service;
 
 import cn.rest.entity.User;
-import cn.rest.exception.InvalidPasswordException;
-import cn.rest.exception.InvalidSignException;
-import cn.rest.exception.ParamFormatException;
-import cn.rest.exception.PhoneExistException;
-import cn.rest.exception.SignNotFoundException;
-import cn.rest.exception.SystemException;
-import cn.rest.exception.UserExistException;
-import cn.rest.exception.UserNotFoundException;
+import cn.rest.exception.ServiceException;
 
 public interface UserService {
 
-    String userLogin(String phone, String psw) throws UserNotFoundException,
-            InvalidPasswordException, ParamFormatException, SystemException;
+    String userLogin(String phone, String psw) throws ServiceException;
 
-    void addUserBySign(User user, Integer sign) throws ParamFormatException,
-            UserExistException, SystemException, SignNotFoundException,
-            InvalidSignException;
+    void addUserBySign(User user, Integer sign) throws ServiceException;
 
-    int getMsgSign(String phone) throws SystemException, ParamFormatException,
-            PhoneExistException;
+    int sendPhoneMsgSign(String phone) throws ServiceException;
 
-    boolean existPhone(String phone) throws ParamFormatException,
-            SystemException;
+    boolean existPhone(String phone) throws ServiceException;
 
 }

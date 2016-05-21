@@ -8,16 +8,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.rest.entity.User;
-import cn.rest.exception.InvalidPasswordException;
-import cn.rest.exception.InvalidSignException;
-import cn.rest.exception.ParamFormatException;
-import cn.rest.exception.PhoneExistException;
-import cn.rest.exception.SignNotFoundException;
-import cn.rest.exception.SystemException;
-import cn.rest.exception.UserExistException;
-import cn.rest.exception.UserNotFoundException;
+import cn.rest.exception.ServiceException;
+import cn.rest.response.ResponseUtils;
 import cn.rest.service.UserService;
-import cn.rest.util.ResponseUtils;
 
 @RestController
 @RequestMapping("/user")
@@ -30,22 +23,21 @@ public class UserController {
 
         try {
             userService.addUserBySign(user, fb_sign);
-        } catch (ParamFormatException | UserExistException | SystemException
-                | SignNotFoundException | InvalidSignException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, null);
+        return ResponseUtils.get();
     }
 
     @RequestMapping(value = "/sign/{phone}", method = RequestMethod.GET)
     public ResponseEntity<Object> getMsgSign(@PathVariable String phone) {
-        int sign=0;
+        int sign = 0;
         try {
-            sign = userService.getMsgSign(phone);
-        } catch (SystemException | ParamFormatException | PhoneExistException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+            sign = userService.sendPhoneMsgSign(phone);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, sign);
+        return ResponseUtils.get(sign);
     }
 
     @RequestMapping(value = "/phone/exist/{phone}", method = RequestMethod.GET)
@@ -53,10 +45,10 @@ public class UserController {
         boolean flag = true;
         try {
             flag = userService.existPhone(phone);
-        } catch (ParamFormatException | SystemException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, flag);
+        return ResponseUtils.get(flag);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -65,11 +57,10 @@ public class UserController {
         String token = null;
         try {
             token = userService.userLogin(fb_user_phone, fb_user_password);
-        } catch (UserNotFoundException | InvalidPasswordException
-                | ParamFormatException | SystemException e) {
-            return ResponseUtils.get(e.getCode(), e.getMessage(), null);
+        } catch (ServiceException e) {
+            return ResponseUtils.get(e);
         }
-        return ResponseUtils.get(20000, null, token);
+        return ResponseUtils.get(token);
     }
 
 }

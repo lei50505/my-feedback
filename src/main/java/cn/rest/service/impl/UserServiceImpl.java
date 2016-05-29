@@ -169,13 +169,13 @@ public class UserServiceImpl implements UserService {
             throw ErrorUtils.get(e);
         }
         if(user==null){
-            return null;
+            throw ErrorUtils.get(ErrorCode.UserTokenNotFoundError);
         }
         if (user.getFb_expired_at().getTime() < new Date().getTime()) {
             user.setFb_expired_at(null);
             user.setFb_user_token(null);
             updateUserByPk(user);
-            return null;
+            throw ErrorUtils.get(ErrorCode.InvalidUserTokenError);
         }
         return user;
     }
@@ -224,9 +224,6 @@ public class UserServiceImpl implements UserService {
     public UserInfo getUserInfoByToken(String token)
             throws ServiceException {
         User user = getUserByToken(token);
-        if(user==null){
-            throw ErrorUtils.get(ErrorCode.InvalidUserTokenError);
-        }
         UserInfo u = new UserInfo();
         u.setFb_user_id(user.getFb_user_id());
         u.setFb_shop_id(user.getFb_shop_id());

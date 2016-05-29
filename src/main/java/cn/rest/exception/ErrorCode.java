@@ -13,6 +13,7 @@ public enum ErrorCode {
     InvalidSignError(40025,"验证码错误"),
     PhoneFormatError(40026,"电话号码格式有误"),
     InvalidUserTokenError(40027,"用户token无效"),
+    UserTokenNotFoundError(40028,"用户token不存在"),
     EmailExistError(40031,"邮箱已存在"),
     EmailNotFoundError(40032,"邮箱不存在"),
     SystemError(50001,"服务异常"),

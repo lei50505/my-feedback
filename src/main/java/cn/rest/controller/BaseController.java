@@ -12,12 +12,19 @@ import cn.rest.response.ResponseUtils;
 public class BaseController {
     @ExceptionHandler(value = SystemException.class)
     public ResponseEntity<Object> handleSystemException(SystemException e) {
-        return ResponseUtils.get(e, e.getLocalizedMessage());
+        return ResponseUtils.get(e);
     }
 
     @ExceptionHandler(value = Throwable.class)
     public ResponseEntity<Object> handleThrowable(Throwable e) {
-        return ResponseUtils.get(ErrorCode.UnknownError,
-                e.getLocalizedMessage());
+        String msg = e.getLocalizedMessage();
+        if(msg!=null){
+            return ResponseUtils.get(ErrorCode.UnknownError,msg);
+        }
+        String name = e.toString();
+        if(name!=null){
+            return ResponseUtils.get(ErrorCode.UnknownError,name);
+        }
+        return ResponseUtils.get(ErrorCode.UnknownError);
     }
 }

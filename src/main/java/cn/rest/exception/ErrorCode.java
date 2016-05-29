@@ -12,10 +12,12 @@ public enum ErrorCode {
     SignNotFoundError(40024,"没有获取验证码"),
     InvalidSignError(40025,"验证码错误"),
     PhoneFormatError(40026,"电话号码格式有误"),
+    InvalidUserTokenError(40027,"用户token无效"),
     EmailExistError(40031,"邮箱已存在"),
     EmailNotFoundError(40032,"邮箱不存在"),
     SystemError(50001,"服务异常"),
-    UnknownError(50002,"服务异常")
+    UnknownError(50002,"未知异常"),
+    NullError(50003,"异常为空")
     ;
     private int code;
     private String message;

@@ -31,10 +31,9 @@ public class ResponseUtils {
         return get(e.getCode(), e.getMessage(), null);
     }
     public static <T> ResponseEntity<Object> get(SystemException e) {
-        return get(ErrorCode.SystemError.getCode(), e.getMessage(), null);
-    }
-    public static <T> ResponseEntity<Object> get(SystemException e,String message) {
-        return get(ErrorCode.SystemError.getCode(), message, null);
+        String msg = e.getLocalizedMessage();
+        String name = e.toString();
+        return get(ErrorCode.SystemError, msg==null?name:msg);
     }
 
     public static <T> ResponseEntity<Object> get(ErrorCode e) {

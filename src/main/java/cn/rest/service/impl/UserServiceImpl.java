@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.rest.dao.UserDao;
+import cn.rest.dto.UserInfo;
 import cn.rest.entity.User;
 import cn.rest.exception.ErrorCode;
 import cn.rest.exception.ErrorUtils;
@@ -167,7 +168,9 @@ public class UserServiceImpl implements UserService {
         } catch (Exception e) {
             throw ErrorUtils.get(e);
         }
-
+        if(user==null){
+            return null;
+        }
         if (user.getFb_expired_at().getTime() < new Date().getTime()) {
             user.setFb_expired_at(null);
             user.setFb_user_token(null);
@@ -215,6 +218,22 @@ public class UserServiceImpl implements UserService {
         }
         delPhoneMsgSignFromRedis(phone);
         addUser(user);
+    }
+
+    @Override
+    public UserInfo getUserInfoByToken(String token)
+            throws ServiceException {
+        User user = getUserByToken(token);
+        if(user==null){
+            throw ErrorUtils.get(ErrorCode.InvalidUserTokenError);
+        }
+        UserInfo u = new UserInfo();
+        u.setFb_user_id(user.getFb_user_id());
+        u.setFb_shop_id(user.getFb_shop_id());
+        u.setFb_user_name(user.getFb_user_name());
+        u.setFb_user_phone(user.getFb_user_phone());
+        u.setFb_user_status(user.getFb_user_status());
+        return u;
     }
 
 }

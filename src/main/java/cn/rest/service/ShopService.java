@@ -9,4 +9,6 @@ public interface ShopService {
     void addShop(Shop shop, Integer sign) throws ServiceException;
     
     String login(String email,String psw)throws ServiceException;
+    
+    Shop getShopById(int shopId)throws ServiceException;
 }

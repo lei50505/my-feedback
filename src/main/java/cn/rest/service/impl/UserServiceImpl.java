@@ -14,6 +14,7 @@ import cn.rest.entity.User;
 import cn.rest.exception.ErrorCode;
 import cn.rest.exception.ErrorUtils;
 import cn.rest.exception.ServiceException;
+import cn.rest.service.ShopService;
 import cn.rest.service.UserService;
 import cn.rest.util.Md5Utils;
 import cn.rest.util.PhoneUtils;
@@ -24,6 +25,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+    
+    @Autowired
+    private ShopService shopService;
 
     public static void paramNotNull(Object o) throws ServiceException {
         if (o == null) {

@@ -195,4 +195,13 @@ public class ShopServiceImpl implements ShopService {
         }
     }
 
+    @Override
+    public Shop getShopById(int shopId) throws ServiceException {
+        try {
+            return shopDao.selectByPk(shopId);
+        } catch (Exception e) {
+            throw ErrorUtils.get(e);
+        }
+    }
+
 }

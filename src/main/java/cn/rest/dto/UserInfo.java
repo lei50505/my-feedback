@@ -3,6 +3,7 @@ package cn.rest.dto;
 public class UserInfo {
     private Integer fb_user_id;
     private Integer fb_shop_id;
+    private String fb_shop_name;
     private String fb_user_name;
     private String fb_user_phone;
     private Integer fb_user_status;
@@ -11,6 +12,13 @@ public class UserInfo {
     }
     public void setFb_user_id(Integer fb_user_id) {
         this.fb_user_id = fb_user_id;
+    }
+    
+    public String getFb_shop_name() {
+        return fb_shop_name;
+    }
+    public void setFb_shop_name(String fb_shop_name) {
+        this.fb_shop_name = fb_shop_name;
     }
     public Integer getFb_shop_id() {
         return fb_shop_id;

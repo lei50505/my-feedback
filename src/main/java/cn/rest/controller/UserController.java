@@ -19,58 +19,39 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = "application/x-www-form-urlencoded")
-    public ResponseEntity<Object> addUser(User user, Integer fb_sign) {
+    public ResponseEntity<Object> addUser(User user, Integer fb_sign)
+            throws ServiceException {
 
-        try {
-            userService.addUserBySign(user, fb_sign);
-        } catch (ServiceException e) {
-            return ResponseUtils.get(e);
-        }
+        userService.addUserBySign(user, fb_sign);
         return ResponseUtils.get();
     }
 
     @RequestMapping(value = "/sign/{phone}", method = RequestMethod.GET)
-    public ResponseEntity<Object> getMsgSign(@PathVariable String phone) {
-        int sign = 0;
-        try {
-            sign = userService.sendPhoneMsgSign(phone);
-        } catch (ServiceException e) {
-            return ResponseUtils.get(e);
-        }
+    public ResponseEntity<Object> getMsgSign(@PathVariable String phone)
+            throws ServiceException {
+        int sign = userService.sendPhoneMsgSign(phone);
         return ResponseUtils.get(sign);
     }
 
     @RequestMapping(value = "/phone/exist/{phone}", method = RequestMethod.GET)
-    public ResponseEntity<Object> existPhone(@PathVariable String phone) {
-        boolean flag = true;
-        try {
-            flag = userService.existPhone(phone);
-        } catch (ServiceException e) {
-            return ResponseUtils.get(e);
-        }
+    public ResponseEntity<Object> existPhone(@PathVariable String phone)
+            throws ServiceException {
+        boolean flag = userService.existPhone(phone);
         return ResponseUtils.get(flag);
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> login(String fb_user_phone,
-            String fb_user_password) {
-        String token = null;
-        try {
-            token = userService.userLogin(fb_user_phone, fb_user_password);
-        } catch (ServiceException e) {
-            return ResponseUtils.get(e);
-        }
+            String fb_user_password) throws ServiceException {
+        String token = userService.userLogin(fb_user_phone, fb_user_password);
         return ResponseUtils.get(token);
     }
 
-    @RequestMapping( method = RequestMethod.GET)
-    public ResponseEntity<Object> getUserInfo(String fb_user_token) {
-        try {
-            User user = userService.getUserByToken(fb_user_token);
-            return ResponseUtils.get(user);
-        } catch (ServiceException e) {
-            return ResponseUtils.get(e);
-        }
+    @RequestMapping(method = RequestMethod.GET)
+    public ResponseEntity<Object> getUserInfo(String fb_user_token)
+            throws ServiceException {
+        User user = userService.getUserByToken(fb_user_token);
+        return ResponseUtils.get(user);
     }
 
 }

@@ -1,6 +1,5 @@
 package cn.rest.service;
 
-import cn.rest.dto.UserInfo;
 import cn.rest.entity.User;
 import cn.rest.exception.ServiceException;
 
@@ -14,6 +13,6 @@ public interface UserService {
 
     boolean existPhone(String phone) throws ServiceException;
     
-    UserInfo getUserInfoByToken(String fb_user_token)throws ServiceException;
+    User getUserByToken(String token) throws ServiceException;
 
 }

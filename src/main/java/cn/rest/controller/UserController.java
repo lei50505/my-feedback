@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.rest.dto.UserInfo;
 import cn.rest.entity.User;
 import cn.rest.exception.ServiceException;
 import cn.rest.response.ResponseUtils;
@@ -64,11 +63,11 @@ public class UserController {
         return ResponseUtils.get(token);
     }
 
-    @RequestMapping(value = "info", method = RequestMethod.POST)
+    @RequestMapping( method = RequestMethod.GET)
     public ResponseEntity<Object> getUserInfo(String fb_user_token) {
         try {
-            UserInfo userInfo = userService.getUserInfoByToken(fb_user_token);
-            return ResponseUtils.get(userInfo);
+            User user = userService.getUserByToken(fb_user_token);
+            return ResponseUtils.get(user);
         } catch (ServiceException e) {
             return ResponseUtils.get(e);
         }

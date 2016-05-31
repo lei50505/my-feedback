@@ -5,7 +5,4 @@ public class ErrorUtils {
         return new ServiceException(ec);
     }
     
-    public static SystemException get(Throwable e){
-        return new SystemException(e);
-    }
 }

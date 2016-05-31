@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import cn.rest.exception.ErrorCode;
 import cn.rest.exception.ServiceException;
-import cn.rest.exception.SystemException;
 import cn.rest.response.ResponseUtils;
 
 @ControllerAdvice
@@ -14,14 +13,6 @@ public class BaseController {
     @ExceptionHandler(value = ServiceException.class)
     public ResponseEntity<Object> handleServiceException(ServiceException e) {
         return ResponseUtils.get(e.getCode(), e.getMessage());
-    }
-
-    @ExceptionHandler(value = SystemException.class)
-    public ResponseEntity<Object> handleSystemException(SystemException e) {
-        String msg = e.getLocalizedMessage();
-        String name = e.toString();
-        return ResponseUtils.get(ErrorCode.SystemError.getCode(),
-                msg == null ? name : msg);
     }
 
     @ExceptionHandler(value = Throwable.class)

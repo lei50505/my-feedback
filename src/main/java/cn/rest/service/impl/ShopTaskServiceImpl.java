@@ -12,13 +12,15 @@ public class ShopTaskServiceImpl implements ShopTaskService {
 
     @Autowired
     private ShopTaskDao shopTaskDao;
+
     @Override
     public void add(ShopTask shopTask) {
         shopTaskDao.insert(shopTask);
     }
+
     @Override
-    public void deleteByPk(int shopTaskId) {
-        shopTaskDao.deleteByPk(shopTaskId);
+    public void deleteById(int fb_shop_task_id) {
+        shopTaskDao.deleteByPk(fb_shop_task_id);
     }
 
 }

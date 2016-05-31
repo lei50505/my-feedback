@@ -11,7 +11,6 @@ import cn.rest.dao.ShopDao;
 import cn.rest.entity.Shop;
 import cn.rest.exception.ErrorCode;
 import cn.rest.exception.ErrorUtils;
-import cn.rest.exception.ServiceException;
 import cn.rest.service.ShopService;
 import cn.rest.util.EmailUtils;
 import cn.rest.util.Md5Utils;
@@ -23,39 +22,28 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopDao shopDao;
 
-    public static void paramNotNull(Object o) throws ServiceException {
+    public static void paramNotNull(Object o) {
         if (o == null) {
             throw ErrorUtils.get(ErrorCode.ParamFormatError);
         }
     }
 
-    public static void validParamEmail(String email) throws ServiceException {
+    public static void validParamEmail(String email) {
         paramNotNull(email);
         if (!email.matches(".+@.+\\..+")) {
             throw ErrorUtils.get(ErrorCode.ParamFormatError);
         }
     }
 
-    public Shop getShopByEmail(String email) throws ServiceException {
+    public Shop getShopByEmail(String email) {
         validParamEmail(email);
-        Shop shop = null;
-        try {
-            shop = shopDao.getByEmail(email);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        Shop shop = shopDao.getByEmail(email);
         return shop;
     }
 
-    public static void setEmailSignToRedis(String email, int num)
-            throws ServiceException {
+    public static void setEmailSignToRedis(String email, int num) {
         validParamEmail(email);
-        try {
-            RedisUtils.setIntWithExprSs("fb_shop_email_sign_" + email, num,
-                    60 * 5);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        RedisUtils.setIntWithExprSs("fb_shop_email_sign_" + email, num, 60 * 5);
     }
 
     public static int getInitSign() {
@@ -63,17 +51,12 @@ public class ShopServiceImpl implements ShopService {
         return random.nextInt(899999) + 100000;
     }
 
-    public static void sendEmail(String email, String msg)
-            throws ServiceException {
-        try {
-            EmailUtils.send(email, msg);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+    public static void sendEmail(String email, String msg) {
+        EmailUtils.send(email, msg);
     }
 
     @Override
-    public int sendEmailSign(String email) throws ServiceException {
+    public int sendEmailSign(String email) {
 
         Shop shop = getShopByEmail(email);
         if (shop != null) {
@@ -96,31 +79,19 @@ public class ShopServiceImpl implements ShopService {
         shop.setFb_shop_password(encodePsw);
     }
 
-    public static int getEmailSignFromRedis(String email)
-            throws ServiceException {
+    public static int getEmailSignFromRedis(String email) {
         validParamEmail(email);
-        Integer validSign = null;
-        try {
-            validSign = RedisUtils.getInt("fb_shop_email_sign_" + email);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        Integer validSign = RedisUtils.getInt("fb_shop_email_sign_" + email);
 
         return validSign;
     }
 
-    public static void delEmailSignFromRedis(String email)
-            throws ServiceException {
+    public static void delEmailSignFromRedis(String email) {
         validParamEmail(email);
-        try {
-            RedisUtils.del("fb_shop_email_sign_" + email);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        RedisUtils.del("fb_shop_email_sign_" + email);
     }
 
-    public static void varifySignSuccess(String email, Integer inputSign)
-            throws ServiceException {
+    public static void varifySignSuccess(String email, Integer inputSign) {
         Integer validSign = getEmailSignFromRedis(email);
         if (validSign == null) {
             throw ErrorUtils.get(ErrorCode.SignNotFoundError);
@@ -132,22 +103,18 @@ public class ShopServiceImpl implements ShopService {
         delEmailSignFromRedis(email);
     }
 
-    public void insertShop(Shop shop) throws ServiceException {
+    public void insertShop(Shop shop) {
         paramNotNull(shop);
         Shop validShop = getShopByEmail(shop.getFb_shop_email());
         if (validShop != null) {
             throw ErrorUtils.get(ErrorCode.EmailExistError);
         }
         encodePsw(shop);
-        try {
-            shopDao.insert(shop);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        shopDao.insert(shop);
     }
 
     @Override
-    public void addShop(Shop shop, Integer sign) throws ServiceException {
+    public void addShop(Shop shop, Integer sign) {
         paramNotNull(shop);
         String email = shop.getFb_shop_email();
         Integer validSign = getEmailSignFromRedis(email);
@@ -163,7 +130,7 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public String login(String email, String psw) throws ServiceException {
+    public String login(String email, String psw) {
         Shop shop = getShopByEmail(email);
         if (shop == null) {
             throw ErrorUtils.get(ErrorCode.EmailNotFoundError);
@@ -180,7 +147,7 @@ public class ShopServiceImpl implements ShopService {
         return token;
     }
 
-    public void updateById(Shop shop) throws ServiceException {
+    public void updateById(Shop shop) {
         paramNotNull(shop);
         paramNotNull(shop.getFb_shop_id());
         paramNotNull(shop.getFb_shop_name());
@@ -188,20 +155,12 @@ public class ShopServiceImpl implements ShopService {
         paramNotNull(shop.getFb_shop_address());
         paramNotNull(shop.getFb_shop_email());
         paramNotNull(shop.getFb_shop_password());
-        try {
-            shopDao.updateById(shop);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+        shopDao.updateById(shop);
     }
 
     @Override
-    public Shop getShopById(int shopId) throws ServiceException {
-        try {
-            return shopDao.selectByPk(shopId);
-        } catch (Exception e) {
-            throw ErrorUtils.get(e);
-        }
+    public Shop getShopById(int shopId) {
+        return shopDao.selectByPk(shopId);
     }
 
 }

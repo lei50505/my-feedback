@@ -3,9 +3,10 @@ package cn.rest.exception;
 public enum ErrorCode {
     
     PhoneNotExistError(40011,"手机号码不存在"),
-    ParamNullError(40012,"参数不能为空"),
+    ParamNullError(40012,"参数为空"),
     ParamFormatError(40013,"参数有误"),
     PhoneExistError(40014,"手机号码已存在"),
+    FeedbackTypeNotExistError(40015,"反馈类型不存在"),
     InvalidPasswordError(40021,"密码错误"),
     UserNotFoundError(40022,"用户不存在"),
     UserExistError(40023,"用户已存在"),

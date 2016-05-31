@@ -1,14 +1,13 @@
 package cn.rest.service;
 
 import cn.rest.entity.Shop;
-import cn.rest.exception.ServiceException;
 
 public interface ShopService {
-    int sendEmailSign(String email) throws ServiceException;
+    int sendEmailSign(String email) ;
 
-    void addShop(Shop shop, Integer sign) throws ServiceException;
+    void addShop(Shop shop, Integer sign) ;
     
-    String login(String email,String psw)throws ServiceException;
+    String login(String email,String psw);
     
-    Shop getShopById(int shopId)throws ServiceException;
+    Shop getShopById(int shopId);
 }

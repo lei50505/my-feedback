@@ -1,18 +1,18 @@
 package cn.rest.service;
 
 import cn.rest.entity.User;
-import cn.rest.exception.ServiceException;
 
 public interface UserService {
 
-    String userLogin(String phone, String psw) throws ServiceException;
+    String userLogin(String phone, String psw) ;
 
-    void addUserBySign(User user, Integer sign) throws ServiceException;
+    void addUserBySign(User user, Integer sign) ;
 
-    int sendPhoneMsgSign(String phone) throws ServiceException;
+    int sendPhoneMsgSign(String phone) ;
 
-    boolean existPhone(String phone) throws ServiceException;
+    boolean existPhone(String phone) ;
     
-    User getUserByToken(String token) throws ServiceException;
+    User getUserByToken(String token) ;
+    User getUserById(int fb_user_id) ;
 
 }

@@ -29,7 +29,7 @@ public class ShopController {
     public ResponseEntity<Object> addShop(Shop shop, Integer fb_shop_sign)
             throws ServiceException {
 
-        shopService.addShop(shop, fb_shop_sign);
+        shopService.addShopWithSign(shop, fb_shop_sign);
         return ResponseUtils.get();
     }
 
@@ -43,7 +43,7 @@ public class ShopController {
     @RequestMapping(value = "/get-by-id", method = RequestMethod.POST)
     public ResponseEntity<Object> getById(int fb_shop_id)
             throws ServiceException {
-        Shop shop = shopService.getShopById(fb_shop_id);
+        Shop shop = shopService.getById(fb_shop_id);
         return ResponseUtils.get(shop);
     }
 }

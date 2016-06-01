@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="cn.rest.dao.ShopTaskDao">
-	<insert id="insert" parameterType="cn.rest.entity.ShopTask"
+	<insert id="add" parameterType="cn.rest.entity.ShopTask"
 		useGeneratedKeys="true" keyProperty="fb_shop_task_id">
 		insert into `fb_shop_task` (
 		`fb_shop_id`,
@@ -15,7 +15,7 @@
 		1
 		)
 	</insert>
-	<update id="updateByPkSelective" parameterType="cn.rest.entity.ShopTask">
+	<update id="updateByIdSelective" parameterType="cn.rest.entity.ShopTask">
 		update fb_shop_task
 		<set>
 			<if test="fb_shop_task_status != null">
@@ -26,7 +26,15 @@
 		where fb_shop_task_id = #{fb_shop_task_id,jdbcType=INTEGER}
 	</update>
 
-	<delete id="deleteByPk" parameterType="java.lang.Integer">
+	<update id="updateById" parameterType="cn.rest.entity.ShopTask">
+		update fb_shop_task
+		set
+		fb_shop_task_status = #{fb_shop_task_status,jdbcType=INTEGER}
+		where
+		fb_shop_task_id = #{fb_shop_task_id,jdbcType=INTEGER}
+	</update>
+
+	<delete id="deleteById" parameterType="java.lang.Integer">
 		delete from fb_shop_task
 		where fb_shop_task_id = #{fb_shop_task_id,jdbcType=INTEGER}
 	</delete>
@@ -38,12 +46,19 @@
 		fb_created_at,
 		fb_updated_at
 	</sql>
-	<select id="selectByPk" resultType="cn.rest.entity.ShopTask"
+	<select id="getById" resultType="cn.rest.entity.ShopTask"
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
 		from fb_shop_task
 		where fb_shop_task_id =
 		#{fb_shop_task_id,jdbcType=INTEGER}
+	</select>
+	<select id="getByShopId" parameterType="java.lang.Integer"
+		resultType="cn.rest.entity.ShopTask">
+		select
+		<include refid="Base_Column_List" />
+		from fb_shop_task
+		where fb_shop_id = #{fb_shop_id,jdbcType=INTEGER}
 	</select>
 </mapper>

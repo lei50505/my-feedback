@@ -1,7 +1,6 @@
 package cn.rest.service.impl;
 
 import java.sql.Timestamp;
-import java.util.Random;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,7 @@ import cn.rest.exception.ErrorCode;
 import cn.rest.exception.ErrorUtils;
 import cn.rest.service.ShopService;
 import cn.rest.util.EmailUtils;
-import cn.rest.util.Md5Utils;
-import cn.rest.util.RedisUtils;
+import static cn.rest.service.impl.BaseUtils.*;
 
 @Service
 public class ShopServiceImpl implements ShopService {
@@ -22,116 +20,47 @@ public class ShopServiceImpl implements ShopService {
     @Autowired
     private ShopDao shopDao;
 
-    public static void paramNotNull(Object o) {
-        if (o == null) {
-            throw ErrorUtils.get(ErrorCode.ParamFormatError);
-        }
-    }
-
-    public static void validParamEmail(String email) {
-        paramNotNull(email);
-        if (!email.matches(".+@.+\\..+")) {
-            throw ErrorUtils.get(ErrorCode.ParamFormatError);
-        }
-    }
-
-    public Shop getShopByEmail(String email) {
-        validParamEmail(email);
+    @Override
+    public Shop getByEmail(String email) {
+        validEmail(email);
         Shop shop = shopDao.getByEmail(email);
         return shop;
-    }
-
-    public static void setEmailSignToRedis(String email, int num) {
-        validParamEmail(email);
-        RedisUtils.setIntWithExprSs("fb_shop_email_sign_" + email, num, 60 * 5);
-    }
-
-    public static int getInitSign() {
-        Random random = new Random();
-        return random.nextInt(899999) + 100000;
-    }
-
-    public static void sendEmail(String email, String msg) {
-        EmailUtils.send(email, msg);
     }
 
     @Override
     public int sendEmailSign(String email) {
 
-        Shop shop = getShopByEmail(email);
+        Shop shop = getByEmail(email);
         if (shop != null) {
             throw ErrorUtils.get(ErrorCode.EmailExistError);
         }
-        int num = getInitSign();
-        setEmailSignToRedis(email, num);
+        int num = setEmailSignToRedis(email);
         String msg = "在5分钟内有效，您的验证码为：" + num;
-        sendEmail(email, msg);
+        EmailUtils.send(email, msg);
         return num;
     }
 
-    public static String encodePsw(String psw) {
-        return Md5Utils.strToStr3(psw);
-    }
-
-    public static void encodePsw(Shop shop) {
-        String psw = shop.getFb_shop_password();
-        String encodePsw = encodePsw(psw);
-        shop.setFb_shop_password(encodePsw);
-    }
-
-    public static int getEmailSignFromRedis(String email) {
-        validParamEmail(email);
-        Integer validSign = RedisUtils.getInt("fb_shop_email_sign_" + email);
-
-        return validSign;
-    }
-
-    public static void delEmailSignFromRedis(String email) {
-        validParamEmail(email);
-        RedisUtils.del("fb_shop_email_sign_" + email);
-    }
-
-    public static void varifySignSuccess(String email, Integer inputSign) {
-        Integer validSign = getEmailSignFromRedis(email);
-        if (validSign == null) {
-            throw ErrorUtils.get(ErrorCode.SignNotFoundError);
-        }
-        paramNotNull(inputSign);
-        if (!validSign.equals(inputSign)) {
-            throw ErrorUtils.get(ErrorCode.InvalidSignError);
-        }
-        delEmailSignFromRedis(email);
-    }
-
-    public void insertShop(Shop shop) {
+    @Override
+    public void add(Shop shop) {
         paramNotNull(shop);
-        Shop validShop = getShopByEmail(shop.getFb_shop_email());
+        Shop validShop = getByEmail(shop.getFb_shop_email());
         if (validShop != null) {
             throw ErrorUtils.get(ErrorCode.EmailExistError);
         }
         encodePsw(shop);
-        shopDao.insert(shop);
+        shopDao.add(shop);
     }
 
     @Override
-    public void addShop(Shop shop, Integer sign) {
+    public void addShopWithSign(Shop shop, Integer sign) {
         paramNotNull(shop);
-        String email = shop.getFb_shop_email();
-        Integer validSign = getEmailSignFromRedis(email);
-        if (validSign == null) {
-            throw ErrorUtils.get(ErrorCode.SignNotFoundError);
-        }
-        paramNotNull(sign);
-        if (!validSign.equals(sign)) {
-            throw ErrorUtils.get(ErrorCode.InvalidSignError);
-        }
-        delEmailSignFromRedis(email);
-        insertShop(shop);
+        validEmailSign(shop.getFb_shop_email(), sign);
+        add(shop);
     }
 
     @Override
     public String login(String email, String psw) {
-        Shop shop = getShopByEmail(email);
+        Shop shop = getByEmail(email);
         if (shop == null) {
             throw ErrorUtils.get(ErrorCode.EmailNotFoundError);
         }
@@ -147,6 +76,7 @@ public class ShopServiceImpl implements ShopService {
         return token;
     }
 
+    @Override
     public void updateById(Shop shop) {
         paramNotNull(shop);
         paramNotNull(shop.getFb_shop_id());
@@ -159,8 +89,22 @@ public class ShopServiceImpl implements ShopService {
     }
 
     @Override
-    public Shop getShopById(int shopId) {
-        return shopDao.selectByPk(shopId);
+    public Shop getById(Integer fb_shop_id) {
+        paramNotNull(fb_shop_id);
+        return shopDao.getById(fb_shop_id);
+    }
+
+    @Override
+    public void updateByIdSelective(Shop shop) {
+        paramNotNull(shop);
+        paramNotNull(shop.getFb_shop_id());
+        shopDao.updateByIdSelective(shop);
+    }
+
+    @Override
+    public Shop getByToken(String fb_shop_token) {
+        paramNotNull(fb_shop_token);
+        return shopDao.getByToken(fb_shop_token);
     }
 
 }

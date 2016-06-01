@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="cn.rest.dao.ShopDao">
-	<insert id="insert" parameterType="cn.rest.entity.Shop"
+	<insert id="add" parameterType="cn.rest.entity.Shop"
 		useGeneratedKeys="true" keyProperty="fb_shop_id">
 		insert into `fb_shop` (
 		`fb_shop_name`,
@@ -37,7 +37,7 @@
 		#{fb_shop_id,jdbcType=INTEGER}
 	</update>
 
-	<update id="updateByPkSelective" parameterType="cn.rest.entity.Shop">
+	<update id="updateByIdSelective" parameterType="cn.rest.entity.Shop">
 		update fb_shop
 		<set>
 			<if test="fb_shop_name != null">
@@ -76,7 +76,7 @@
 		fb_created_at,
 		fb_updated_at
 	</sql>
-	<select id="selectByPk" resultType="cn.rest.entity.Shop"
+	<select id="getById" resultType="cn.rest.entity.Shop"
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
@@ -90,5 +90,11 @@
 		from fb_shop
 		where fb_shop_email = #{fb_shop_email,jdbcType=VARCHAR}
 	</select>
-
+	<select id="getByToken" parameterType="java.lang.String"
+		resultType="cn.rest.entity.Shop">
+		select
+		<include refid="Base_Column_List" />
+		from fb_shop
+		where fb_shop_token = #{fb_shop_token,jdbcType=VARCHAR}
+	</select>
 </mapper>

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import cn.rest.entity.Shop;
 import cn.rest.entity.User;
 import cn.rest.exception.ServiceException;
 import cn.rest.response.ResponseUtils;
@@ -50,8 +51,15 @@ public class UserController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Object> getUserInfo(String fb_user_token)
             throws ServiceException {
-        User user = userService.getUserByToken(fb_user_token);
+        User user = userService.getByToken(fb_user_token);
         return ResponseUtils.get(user);
+    }
+
+    @RequestMapping(value = "/get-shop-by-user-token", method = RequestMethod.POST)
+    public ResponseEntity<Object> getShopByUserToken(String fb_user_token) {
+        Shop shop = userService.getShopByUserToken(fb_user_token);
+        return ResponseUtils.get(shop);
+        
     }
 
 }

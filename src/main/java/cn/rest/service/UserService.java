@@ -1,18 +1,37 @@
 package cn.rest.service;
 
+import java.util.List;
+
+import cn.rest.entity.Feedback;
+import cn.rest.entity.Shop;
 import cn.rest.entity.User;
 
 public interface UserService {
 
-    String userLogin(String phone, String psw) ;
+    void add(User user);
 
-    void addUserBySign(User user, Integer sign) ;
+    void updateByIdSelective(User user);
 
-    int sendPhoneMsgSign(String phone) ;
+    void updateById(User user);
 
-    boolean existPhone(String phone) ;
+    User getById(Integer fb_user_id);
+
+    User getByPhone(String fb_user_phone);
+
+    User getByToken(String fb_user_token);
+
+    String userLogin(String fb_user_phone, String inputPsw);
+
+    void addUserBySign(User user, Integer sign);
+
+    int sendPhoneMsgSign(String fb_user_phone);
+
+    boolean existPhone(String fb_user_phone);
     
-    User getUserByToken(String token) ;
-    User getUserById(int fb_user_id) ;
+    User getValidUserByToken(String token);
+    
+    Shop getShopByUserToken(String fb_user_token);
+    
+    List<Feedback> getPageByUserToken(String fb_user_token,int page);
 
 }

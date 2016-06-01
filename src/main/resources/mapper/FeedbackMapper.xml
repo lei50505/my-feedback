@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
  "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="cn.rest.dao.FeedbackDao">
-	<insert id="insert" parameterType="cn.rest.entity.Feedback"
+	<insert id="add" parameterType="cn.rest.entity.Feedback"
 		useGeneratedKeys="true" keyProperty="fb_feedback_id">
 		insert into `fb_feedback`(
 		`fb_user_id`,
@@ -21,7 +21,7 @@
 		0
 		)
 	</insert>
-	<update id="updateByPkSelective" parameterType="cn.rest.entity.Feedback">
+	<update id="updateByIdSelective" parameterType="cn.rest.entity.Feedback">
 		update fb_feedback
 		<set>
 			<if test="fb_feedback_status != null">
@@ -30,6 +30,12 @@
 			</if>
 		</set>
 		where fb_feedback_id = #{fb_feedback_id,jdbcType=INTEGER}
+	</update>
+	<update id="updateById" parameterType="cn.rest.entity.Feedback">
+		update fb_feedback set
+		fb_feedback_status = #{fb_feedback_status,jdbcType=INTEGER}
+		where
+		fb_feedback_id = #{fb_feedback_id,jdbcType=INTEGER}
 	</update>
 	<sql id="Base_Column_List">
 		fb_feedback_id,
@@ -42,12 +48,48 @@
 		fb_created_at,
 		fb_updated_at
 	</sql>
-	<select id="selectByPk" resultType="cn.rest.entity.Feedback"
+	<select id="getById" resultType="cn.rest.entity.Feedback"
 		parameterType="java.lang.Integer">
 		select
 		<include refid="Base_Column_List" />
 		from fb_feedback
 		where fb_feedback_id =
 		#{fb_feedback_id,jdbcType=INTEGER}
+	</select>
+	<select id="getByShopId" parameterType="java.lang.Integer"
+		resultType="cn.rest.entity.Feedback">
+		select
+		<include refid="Base_Column_List" />
+		from fb_feedback
+		where fb_shop_id = #{fb_shop_id,jdbcType=INTEGER}
+	</select>
+	<select id="getByUserId" parameterType="java.lang.Integer"
+		resultType="cn.rest.entity.Feedback">
+		select
+		<include refid="Base_Column_List" />
+		from fb_feedback
+		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteById" parameterType="java.lang.Integer">
+		delete from fb_feedback
+		where fb_feedback_id =
+		#{fb_feedback_id,jdbcType=INTEGER}
+	</delete>
+
+	<select id="getByUserIdLimit" resultType="cn.rest.entity.Feedback">
+		select
+		<include refid="Base_Column_List" />
+		from fb_feedback
+		where fb_user_id = #{fb_user_id,jdbcType=INTEGER}
+		order by fb_updated_at desc
+		limit #{fb_start,jdbcType=INTEGER},#{fb_count,jdbcType=INTEGER}
+	</select>
+	<select id="getByShopIdLimit" resultType="cn.rest.entity.Feedback">
+		select
+		<include refid="Base_Column_List" />
+		from fb_feedback
+		where fb_Shop_id = #{fb_shop_id,jdbcType=INTEGER}
+		order by fb_updated_at desc
+		limit #{fb_start,jdbcType=INTEGER},#{fb_count,jdbcType=INTEGER}
 	</select>
 </mapper>

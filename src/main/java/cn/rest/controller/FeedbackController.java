@@ -22,5 +22,9 @@ public class FeedbackController {
         feedbackService.add(feedback);
         return ResponseUtils.get();
     }
+    
+    public ResponseEntity<Object> getPageByUserToken(String fb_user_token,int page){
+        return null;
+    }
 
 }

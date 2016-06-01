@@ -1,8 +1,21 @@
 package cn.rest.service;
 
+import java.util.List;
+
 import cn.rest.entity.ShopTask;
 
 public interface ShopTaskService {
+
+    
     void add(ShopTask shopTask);
-    void deleteById(int fb_shop_task_id);
+
+    void updateById(ShopTask shopTask);
+
+    void updateByIdSelective(ShopTask shopTask);
+
+    void deleteById(Integer fb_shop_task_id);
+
+    ShopTask getById(Integer fb_shop_task_id);
+    
+    List<ShopTask> getByShopId(Integer fb_shop_id);
 }
